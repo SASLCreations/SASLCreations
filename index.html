@@ -1,1 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <meta
+    name="description"
+    content="Personal portfolio and profile website for [Your Name], [Profession/Role]."
+  />
+
+  <title>[Your Name] — [Profession/Role]</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS
+    ========================================================= */
+    :root {
+      --bg: #0b1120;
+      --bg-soft: #111827;
+      --surface: rgba(17, 24, 39, 0.72);
+      --surface-solid: #111827;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.16);
+      --accent: #38bdf8;
+      --accent-strong: #0ea5e9;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      --max-width: 1120px;
+      --radius: 18px;
+      --nav-height: 72px;
+    }
+
+    /* Light theme */
+    body.light {
+      --bg: #f8fafc;
+      --bg-soft: #e2e8f0;
+      --surface: rgba(255, 255, 255, 0.8);
+      --surface-solid: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: rgba(15, 23, 42, 0.1);
+      --accent: #0284c7;
+      --accent-strong: #0369a1;
+      --accent-soft: rgba(2, 132, 199, 0.1);
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+    }
+
+    /* =========================================================
+       RESET / BASE
+    ========================================================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-height) + 20px);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(
+          circle at 85% 15%,
+          rgba(56, 189, 248, 0.08),
+          transparent 28%
+        ),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max-width));
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       ACCESSIBILITY
+    ========================================================= */
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 20px;
+      z-index: 9999;
+      padding: 10px 16px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .skip-link:focus {
+      top: 20px;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* =========================================================
+       NAVIGATION
+    ========================================================= */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -7px;
+      width: 100%;
+      height: 2px;
+      border-radius: 99px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .theme-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+    .hero {
+      min-height: calc(100vh - var(--nav-height));
+      display: grid;
+      place-items: center;
+      padding: 100px 0;
+    }
+
+    .hero-content {
+      max-width: 850px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 7px 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+    }
+
+    .hero h1 .accent {
+      color: var(--accent);
+    }
+
+    .hero-description {
+      max-width: 680px;
+      margin: 28px auto 0;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-weight: 700;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(14, 165, 233, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: var(--accent-strong);
+      box-shadow: 0 14px 35px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* =========================================================
+       SECTIONS
+    ========================================================= */
+    section {
+      padding: 100px 0;
+    }
+
+    .section-heading {
+      max-width: 680px;
+      margin-bottom: 44px;
+    }
+
+    .section-label {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+    }
+
+    .section-heading p {
+      margin: 16px 0 0;
+      color: var(--text-muted);
+    }
+
+    /* =========================================================
+       ABOUT
+    ========================================================= */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+    }
+
+    .about-card,
+    .skills-card {
+      padding: 34px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .about-card h3,
+    .skills-card h3 {
+      margin: 0 0 18px;
+      font-size: 1.25rem;
+    }
+
+    .about-card p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    .about-card p + p {
+      margin-top: 16px;
+    }
+
+    /* =========================================================
+       SKILLS
+    ========================================================= */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .skill-card {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--bg-soft);
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .skill-number {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .skill-card strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    /* =========================================================
+       CONTACT
+    ========================================================= */
+    .contact-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent-soft),
+          transparent 60%
+        ),
+        var(--surface);
+    }
+
+    .contact-card h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      letter-spacing: -0.04em;
+    }
+
+    .contact-card p {
+      margin: 10px 0 0;
+      color: var(--text-muted);
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .footer-copy {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 18px;
+    }
+
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
+    /* =========================================================
+       RESPONSIVE DESIGN
+    ========================================================= */
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-card {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(calc(100% - 28px), var(--max-width));
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 80px 0 90px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 15vw, 4.5rem);
+      }
+
+      .hero-buttons {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .about-card,
+      .skills-card,
+      .contact-card {
+        padding: 24px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+    ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- =======================================================
+       STICKY NAVIGATION
+  ======================================================== -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="logo" href="#home" aria-label="Go to homepage">
+        [Your<span>Name</span>]
+      </a>
+
+      <div class="nav-actions">
+        <nav aria-label="Primary navigation">
+          <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Switch to light mode"
+          title="Toggle light/dark mode"
+        >
+          <svg
+            class="theme-icon"
+            id="themeIcon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-content">
+          <span class="eyebrow">Available for new opportunities</span>
+
+          <h1>
+            Hi, I'm <span class="accent">[Your Name]</span>.
+          </h1>
+
+          <p class="hero-description">
+            I'm a [Profession/Role] who creates thoughtful, effective work
+            and turns ideas into polished digital experiences.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#skills">
+              View My Work
+            </a>
+
+            <a class="btn btn-secondary" href="#contact">
+              Contact Me
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         ABOUT + SKILLS
+    ====================================================== -->
+    <section id="about">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">About Me</p>
+          <h2>A little bit about who I am.</h2>
+          <p>
+            A concise introduction to your background, experience, and
+            the kind of problems you enjoy solving.
+          </p>
+        </div>
+
+        <div class="about-grid">
+          <article class="about-card">
+            <h3>My Story</h3>
+
+            <p>
+              [Write 1–2 sentences about who you are and what you do.]
+              I'm passionate about creating meaningful work, solving
+              challenging problems, and continuously learning new things.
+            </p>
+
+            <p>
+              Whether I'm working independently or collaborating with a
+              team, I focus on quality, clarity, and delivering results
+              that make a real difference.
+            </p>
+          </article>
+
+          <aside class="skills-card" id="skills">
+            <h3>Key Skills</h3>
+
+            <div class="skills-grid">
+              <div class="skill-card">
+                <span class="skill-number">01</span>
+                <strong>[Skill 1]</strong>
+              </div>
+
+              <div class="skill-card">
+                <span class="skill-number">02</span>
+                <strong>[Skill 2]</strong>
+              </div>
+
+              <div class="skill-card">
+                <span class="skill-number">03</span>
+                <strong>[Skill 3]</strong>
+              </div>
+
+              <div class="skill-card">
+                <span class="skill-number">04</span>
+                <strong>[Skill 4]</strong>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTACT
+    ====================================================== -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-card">
+          <div>
+            <p class="section-label">Get In Touch</p>
+            <h2>Let's build something great.</h2>
+            <p>
+              Have a project, opportunity, or idea you'd like to discuss?
+              I'd love to hear from you.
+            </p>
+          </div>
+
+          <a
+            class="btn btn-primary"
+            href="mailto:your.email@example.com"
+          >
+            Email Me
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+  <footer>
+    <div class="container footer-inner">
+      <p class="footer-copy">
+        © <span id="year"></span> [Your Name]. All rights reserved.
+      </p>
+
+      <div class="social-links">
+        <a
+          href="[Your LinkedIn URL or placeholder]"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+        >
+          LinkedIn
+        </a>
+
+        <a
+          href="[Your link or placeholder]"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub or Portfolio"
+        >
+          GitHub / Portfolio
+        </a>
+
+        <a href="mailto:your.email@example.com">
+          Email
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================
+       DARK / LIGHT MODE
+    ========================================================= */
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+
+    const savedTheme = localStorage.getItem("portfolio-theme");
+
+    if (savedTheme === "light") {
+      document.body.classList.add("light");
+    }
+
+    function updateThemeButton() {
+      const isLight = document.body.classList.contains("light");
+
+      themeToggle.setAttribute(
+        "aria-label",
+        isLight
+          ? "Switch to dark mode"
+          : "Switch to light mode"
+      );
+
+      themeToggle.setAttribute(
+        "title",
+        isLight
+          ? "Switch to dark mode"
+          : "Switch to light mode"
+      );
+
+      /* Sun icon in dark mode, moon icon in light mode */
+      themeIcon.innerHTML = isLight
+        ? `
+          <path d="M21 12.79A9 9 0 1 1 11.21 3
+                   7 7 0 0 0 21 12.79Z"></path>
+        `
+        : `
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        `;
+    }
+
+    updateThemeButton();
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+
+      const theme = document.body.classList.contains("light")
+        ? "light"
+        : "dark";
+
+      localStorage.setItem("portfolio-theme", theme);
+      updateThemeButton();
+    });
+
+    /* =========================================================
+       CURRENT YEAR
+    ========================================================= */
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    /* =========================================================
+       SMOOTH INTERNAL NAVIGATION
+       ========================================================= */
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const targetId = link.getAttribute("href");
+
+        if (!targetId || targetId === "#") return;
+
+        const target = document.querySelector(targetId);
+
+        if (target) {
+          event.preventDefault();
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
